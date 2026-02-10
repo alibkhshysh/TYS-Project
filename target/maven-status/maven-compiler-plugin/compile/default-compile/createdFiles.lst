@@ -1,3 +1,8 @@
+it\unipd\tys\servlet\LogoutServlet.class
+it\unipd\tys\servlet\ProfileServlet.class
+it\unipd\tys\dao\UserDAO.class
 it\unipd\tys\servlet\RegisterServlet.class
 it\unipd\tys\servlet\HomeServlet.class
 it\unipd\tys\servlet\LoginServlet.class
+it\unipd\tys\model\User.class
+it\unipd\tys\dao\DB.class

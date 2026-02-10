@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    container_name: tys-db
+    environment:
+      POSTGRES_DB: tysdb
+      POSTGRES_USER: tysuser
+      POSTGRES_PASSWORD: tyspass
+    ports:
+      - "5432:5432"
+    volumes:
+      - tys_pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+
+  web:
+    image: tomcat:10.1-jdk21
+    container_name: tys-web
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: tysdb
+      DB_USER: tysuser
+      DB_PASS: tyspass
+    volumes:
+      - ./target/tys.war:/usr/local/tomcat/webapps/tys.war
+
+volumes:
+  tys_pgdata:
