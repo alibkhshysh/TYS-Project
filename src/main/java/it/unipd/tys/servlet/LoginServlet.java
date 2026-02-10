@@ -56,8 +56,9 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = req.getSession(true);
             session.setAttribute("userId", u.getId());
             session.setAttribute("userEmail", u.getEmail());
+            session.setAttribute("userName", u.getFirstName());
 
-            resp.sendRedirect(req.getContextPath() + "/profile");
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
 
         } catch (SQLException e) {
             log("Database error during login", e);

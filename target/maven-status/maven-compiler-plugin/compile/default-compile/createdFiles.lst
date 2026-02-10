@@ -1,8 +1,15 @@
 it\unipd\tys\servlet\LogoutServlet.class
-it\unipd\tys\servlet\ProfileServlet.class
-it\unipd\tys\dao\UserDAO.class
+it\unipd\tys\dao\StudyActivityDAO.class
 it\unipd\tys\servlet\RegisterServlet.class
 it\unipd\tys\servlet\HomeServlet.class
 it\unipd\tys\servlet\LoginServlet.class
+it\unipd\tys\servlet\AnalysisServlet.class
+it\unipd\tys\servlet\AnalysisServlet$WeekAccumulator.class
+it\unipd\tys\servlet\ProfileServlet.class
+it\unipd\tys\dao\UserDAO.class
 it\unipd\tys\model\User.class
+it\unipd\tys\servlet\NotesServlet.class
+it\unipd\tys\model\StudyActivity.class
+it\unipd\tys\servlet\DashboardServlet.class
+it\unipd\tys\servlet\AnalysisServlet$CourseAccumulator.class
 it\unipd\tys\dao\DB.class

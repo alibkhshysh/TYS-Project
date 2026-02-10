@@ -1,8 +1,13 @@
+C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\servlet\NotesServlet.java
 C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\servlet\ProfileServlet.java
+C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\servlet\DashboardServlet.java
 C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\dao\DB.java
 C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\servlet\LogoutServlet.java
+C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\dao\StudyActivityDAO.java
 C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\servlet\RegisterServlet.java
-C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\dao\UserDAO.java
 C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\servlet\LoginServlet.java
+C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\servlet\AnalysisServlet.java
+C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\dao\UserDAO.java
+C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\model\StudyActivity.java
 C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\servlet\HomeServlet.java
 C:\Users\alibk\Desktop\TYS-Project\tys\src\main\java\it\unipd\tys\model\User.java
