@@ -258,27 +258,18 @@
     }
 
     .day-details {
-      display: block;
+      display: none;
       width: 100%;
       min-width: 0;
       box-sizing: border-box;
       padding: 0;
-      opacity: 0;
-      max-height: 0;
-      overflow: hidden;
       margin: 0;
-      transform: translateY(-3px);
-      pointer-events: none;
-      transition: opacity 180ms ease, max-height 180ms ease, margin 180ms ease, transform 180ms ease;
     }
 
     .day-cell.has-activities:hover .day-details,
     .day-cell.has-activities:focus-within .day-details {
-      opacity: 1;
-      max-height: calc(var(--day-cell-height) - 72px);
+      display: block;
       margin-bottom: 8px;
-      transform: translateY(0);
-      pointer-events: auto;
     }
 
     .activity-columns {
@@ -319,16 +310,8 @@
       letter-spacing: 0.4px;
     }
 
-    .todo-head,
-    .scheduled-head { color: var(--todo-blue); }
-    .done-head,
-    .completed-head { color: var(--done-green); }
-
-    .empty-note {
-      font-size: 0.72rem;
-      color: #8a8a8a;
-      font-style: italic;
-    }
+    .todo-head { color: var(--todo-blue); }
+    .done-head { color: var(--done-green); }
 
     .summary-columns {
       grid-template-columns: repeat(2, minmax(0, 1fr));
