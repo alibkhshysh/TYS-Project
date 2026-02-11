@@ -221,6 +221,9 @@
       flex-direction: column;
       gap: 0;
       overflow: hidden;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: 1px solid #e3d9da;
     }
 
     .day-top {
@@ -255,10 +258,11 @@
     }
 
     .day-details {
-      display: grid;
-      gap: 6px;
+      display: block;
       width: 100%;
       min-width: 0;
+      box-sizing: border-box;
+      padding: 0;
       opacity: 0;
       max-height: 0;
       overflow: hidden;
@@ -271,7 +275,7 @@
     .day-cell.has-activities:hover .day-details,
     .day-cell.has-activities:focus-within .day-details {
       opacity: 1;
-      max-height: calc(var(--day-cell-height) - 88px);
+      max-height: calc(var(--day-cell-height) - 72px);
       margin-bottom: 8px;
       transform: translateY(0);
       pointer-events: auto;
@@ -329,19 +333,38 @@
     .summary-columns {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 6px;
+      align-items: stretch;
     }
 
     .summary-col {
+      min-width: 0;
       justify-content: flex-start;
       gap: 4px;
-      padding: 6px;
+      padding: 5px 6px;
+      border-radius: 7px;
+    }
+
+    .summary-col .col-head {
+      font-size: 0.56rem;
+      line-height: 1.08;
+      letter-spacing: 0.1px;
+      text-transform: none;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      word-break: break-word;
     }
 
     .summary-time {
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       font-weight: 700;
-      line-height: 1.2;
+      line-height: 1.12;
       color: #2f3a45;
+      width: 100%;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      word-break: break-word;
     }
 
     .activity-list {
