@@ -267,24 +267,45 @@
       font-weight: 800;
       color: #6f1d24;
       border-radius: 999px;
-      padding: 2px 8px;
+      padding: 2px 9px;
       font-size: 0.9rem;
+      min-width: 28px;
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
 
     .day-number-btn {
-      border: none;
-      background: transparent;
+      border: 1px solid #bb5b64;
+      background: #fff;
       cursor: pointer;
       line-height: 1;
+      box-shadow: 0 0 0 2px rgba(187, 91, 100, 0.18), 0 1px 0 rgba(111, 29, 36, 0.08);
+      transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease, border-color 140ms ease, color 140ms ease, opacity 140ms ease;
     }
 
-    .day-number-btn:hover {
-      background: #f5e0e3;
+    .day-number-btn:hover,
+    .day-number-btn:focus-visible {
+      background: #fcebec;
+      border-color: #9f171d;
+      box-shadow: 0 0 0 3px rgba(159, 23, 29, 0.22), 0 3px 8px rgba(111, 29, 36, 0.2);
+      transform: translateY(-1px);
+      outline: none;
     }
 
-    .day-number.today {
+    .day-number-btn.today {
       background: var(--accent);
+      border-color: var(--accent);
       color: #fff;
+      box-shadow: 0 2px 6px rgba(159, 23, 29, 0.28);
+    }
+
+    .day-number-btn.today:hover,
+    .day-number-btn.today:focus-visible {
+      background: #861217;
+      border-color: #861217;
     }
 
     .day-details {
@@ -840,6 +861,7 @@
                               class="day-number day-number-btn <%= isToday ? "today" : "" %>"
                               data-day-open="1"
                               data-date="<%= esc(dayIso) %>"
+                              title="Open details for <%= esc(dayIso) %>"
                               aria-label="Open details for <%= esc(dayIso) %>"
                       ><%= day.getDayOfMonth() %></button>
                     </div>
