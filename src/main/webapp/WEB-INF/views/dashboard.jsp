@@ -185,10 +185,11 @@
 
     .day-cell {
       background: #fff;
+      cursor: pointer;
     }
 
     .day-cell.day-state-empty {
-      background: var(--empty-red-soft);
+      background: #fdeff0;
     }
 
     .day-cell.day-state-todo {
@@ -196,23 +197,19 @@
     }
 
     .day-cell.day-state-overdue {
-      background: #fdeff0;
+      background: #f2d2d6;
     }
 
     .day-cell.day-state-done {
       background: #ecf8f1;
     }
 
-    .day-cell.day-state-todo:hover {
-      background: #ddeaff;
+    .day-cell.day-state-mixed {
+      background: linear-gradient(to right, #eaf2ff 0%, #eaf2ff 50%, #ecf8f1 50%, #ecf8f1 100%);
     }
 
-    .day-cell.day-state-overdue:hover {
-      background: #fbe2e4;
-    }
-
-    .day-cell.day-state-done:hover {
-      background: #e3f5eb;
+    .day-cell.day-state-mixed-overdue {
+      background: linear-gradient(to right, #f2d2d6 0%, #f2d2d6 50%, #ecf8f1 50%, #ecf8f1 100%);
     }
 
     .day-wrapper {
@@ -225,6 +222,38 @@
       box-sizing: border-box;
       border-radius: 10px;
       border: 1px solid #e3d9da;
+      transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
+    }
+
+    .day-cell:hover .day-wrapper,
+    .day-cell:focus-within .day-wrapper {
+      box-shadow: 0 2px 8px rgba(93, 62, 67, 0.12);
+      transform: translateY(-1px);
+      border-color: #d8c6c8;
+    }
+
+    .day-cell.day-state-empty:hover {
+      background: #fbe2e4;
+    }
+
+    .day-cell.day-state-todo:hover {
+      background: #ddeaff;
+    }
+
+    .day-cell.day-state-overdue:hover {
+      background: #ebc2c8;
+    }
+
+    .day-cell.day-state-done:hover {
+      background: #e3f5eb;
+    }
+
+    .day-cell.day-state-mixed:hover {
+      background: linear-gradient(to right, #ddeaff 0%, #ddeaff 50%, #e3f5eb 50%, #e3f5eb 100%);
+    }
+
+    .day-cell.day-state-mixed-overdue:hover {
+      background: linear-gradient(to right, #ebc2c8 0%, #ebc2c8 50%, #e3f5eb 50%, #e3f5eb 100%);
     }
 
     .day-top {
@@ -303,6 +332,10 @@
 
     .todo-col { background: #f8fbff; }
     .done-col { background: #f6fff9; }
+    .overdue-col {
+      background: #fff1f2;
+      border-color: #e3b9bf;
+    }
 
     .col-head {
       font-size: 0.72rem;
@@ -313,6 +346,7 @@
 
     .todo-head { color: var(--todo-blue); }
     .done-head { color: var(--done-green); }
+    .overdue-head { color: #8e1c24; }
 
     .summary-columns {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -778,15 +812,17 @@
                   boolean noActivities = todoList.isEmpty() && doneList.isEmpty();
                   boolean hasDone = !doneList.isEmpty();
                   boolean hasTodo = !todoList.isEmpty();
-                  boolean hasOverdueTodo = hasTodo && today != null && day.isBefore(today);
+                  boolean hasMissedScheduled = hasTodo && today != null && day.isBefore(today);
                   boolean hasActivities = !noActivities;
                   boolean isToday = today != null && today.equals(day);
                   String dayClass = "day-cell";
                   if (hasActivities) {
                     dayClass += " has-activities";
-                    if (hasDone) {
+                    if (hasDone && hasTodo) {
+                      dayClass += hasMissedScheduled ? " day-state-mixed-overdue" : " day-state-mixed";
+                    } else if (hasDone) {
                       dayClass += " day-state-done";
-                    } else if (hasOverdueTodo) {
+                    } else if (hasMissedScheduled) {
                       dayClass += " day-state-overdue";
                     } else {
                       dayClass += " day-state-todo";
@@ -811,8 +847,8 @@
                     <% if (hasActivities) { %>
                     <div class="day-details">
                       <div class="activity-columns summary-columns">
-                        <section class="activity-col todo-col summary-col" aria-label="Scheduled activities summary">
-                          <div class="col-head todo-head">Scheduled Activities</div>
+                        <section class="activity-col <%= hasMissedScheduled ? "overdue-col" : "todo-col" %> summary-col" aria-label="Scheduled activities summary">
+                          <div class="col-head <%= hasMissedScheduled ? "overdue-head" : "todo-head" %>">Scheduled Activities</div>
                           <div class="summary-time">Total time: <%= scheduledRegisteredTotal %>m</div>
                         </section>
                         <section class="activity-col done-col summary-col" aria-label="Completed activities summary">
@@ -825,11 +861,11 @@
                     <div class="day-popup-source" hidden>
                       <div class="activity-columns <%= (hasDone && hasTodo) ? "" : "single-col" %>">
                         <% if (hasTodo) { %>
-                        <section class="activity-col todo-col" aria-label="Scheduled activities">
-                          <div class="col-head todo-head">Scheduled Activities</div>
+                        <section class="activity-col <%= hasMissedScheduled ? "overdue-col" : "todo-col" %>" aria-label="Scheduled activities">
+                          <div class="col-head <%= hasMissedScheduled ? "overdue-head" : "todo-head" %>">Scheduled Activities</div>
                           <ul class="activity-list">
                             <% for (StudyActivity a : todoList) { %>
-                              <li class="activity-item todo <%= (today != null && day.isBefore(today)) ? "overdue" : "" %>" title="<%= esc(a.getNotes()) %>">
+                              <li class="activity-item todo <%= hasMissedScheduled ? "overdue" : "" %>" title="<%= esc(a.getNotes()) %>">
                                 <div class="activity-main">
                                   <div>
                                     <span class="line-main"><%= esc(a.getCourseName()) %> -> <%= relatedTime(a) %>m</span>

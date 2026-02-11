@@ -45,6 +45,11 @@ public class DashboardServlet extends HttpServlet {
             return;
         }
 
+        // Keep dashboard month views fresh after add/edit/delete redirects.
+        resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+        resp.setHeader("Pragma", "no-cache");
+        resp.setDateHeader("Expires", 0);
+
         YearMonth month = parseMonth(req.getParameter("month"));
         LocalDate today = LocalDate.now();
         try {
