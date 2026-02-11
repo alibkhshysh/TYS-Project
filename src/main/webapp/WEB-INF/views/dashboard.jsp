@@ -22,8 +22,9 @@
 
   private int relatedTime(StudyActivity a) {
     if (a == null) return 0;
-    if (a.isDone()) return Math.max(0, a.getStudiedMinutes());
-    return Math.max(0, a.getReviewMinutes() > 0 ? a.getReviewMinutes() : a.getStudiedMinutes());
+    int review = Math.max(0, a.getReviewMinutes());
+    int studied = Math.max(0, a.getStudiedMinutes());
+    return review + studied;
   }
 %>
 <%
@@ -766,7 +767,7 @@
                       if (a == null) continue;
                       if (a.isDone()) {
                         doneList.add(a);
-                        doneStudiedTotal += Math.max(0, a.getStudiedMinutes());
+                        doneStudiedTotal += relatedTime(a);
                       } else {
                         todoList.add(a);
                         scheduledRegisteredTotal += relatedTime(a);
@@ -1025,7 +1026,6 @@
       const deleteActivityIdInput = document.getElementById('deleteActivityIdInput');
       const addButtons = document.querySelectorAll('.add-btn[data-date]');
       const dayOpenButtons = document.querySelectorAll('.day-number-btn[data-day-open="1"]');
-      const editButtons = document.querySelectorAll('.edit-btn[data-activity-id]');
       const dialogTitle = document.getElementById('dialogTitle');
       const saveActivityBtn = document.getElementById('saveActivityBtn');
       const modeInput = document.getElementById('modeInput');
@@ -1188,12 +1188,6 @@
         button.addEventListener('click', function () {
           const date = button.getAttribute('data-date') || '';
           openAdd(date);
-        });
-      });
-
-      editButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-          openEdit(button);
         });
       });
 

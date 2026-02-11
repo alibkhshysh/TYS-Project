@@ -168,12 +168,6 @@ public class DashboardServlet extends HttpServlet {
             return;
         }
 
-        if ("DONE".equals(status) && studiedMinutes == 0) {
-            setFlashError(session, "Completed activities require studied time greater than 0.");
-            redirectToMonth(req, resp, requestedMonth);
-            return;
-        }
-
         if ("edit".equals(mode) && activityId <= 0) {
             setFlashError(session, "Invalid activity id.");
             redirectToMonth(req, resp, requestedMonth);
