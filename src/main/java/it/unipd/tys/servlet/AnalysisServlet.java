@@ -72,13 +72,13 @@ public class AnalysisServlet extends HttpServlet {
                                             LocalDate today,
                                             Map<LocalDate, List<StudyActivity>> activitiesByDate) {
         int totalActivities = 0;
-        int doneActivities = 0;
-        int todoActivities = 0;
+        int completedActivities = 0;
+        int scheduledActivities = 0;
         int totalRelatedMinutes = 0;
         int totalStudiedMinutes = 0;
         int totalReviewMinutes = 0;
-        int overdueTodoCount = 0;
-        int pendingTodoMinutes = 0;
+        int overdueScheduledCount = 0;
+        int pendingScheduledMinutes = 0;
 
         int firstWeekOffset = month.atDay(1).getDayOfWeek().getValue() - 1;
 
@@ -101,7 +101,7 @@ public class AnalysisServlet extends HttpServlet {
                 }
 
                 totalActivities++;
-                boolean done = activity.isDone();
+                boolean completed = activity.isCompleted();
                 int studiedMinutes = Math.max(0, activity.getStudiedMinutes());
                 int reviewMinutes = Math.max(0, activity.getReviewMinutes());
                 int relatedMinutes = relatedMinutes(activity);
@@ -110,13 +110,13 @@ public class AnalysisServlet extends HttpServlet {
                 totalReviewMinutes += reviewMinutes;
                 totalRelatedMinutes += relatedMinutes;
 
-                if (done) {
-                    doneActivities++;
+                if (completed) {
+                    completedActivities++;
                 } else {
-                    todoActivities++;
-                    pendingTodoMinutes += relatedMinutes;
+                    scheduledActivities++;
+                    pendingScheduledMinutes += relatedMinutes;
                     if (day.isBefore(today)) {
-                        overdueTodoCount++;
+                        overdueScheduledCount++;
                     }
                 }
 
@@ -134,16 +134,16 @@ public class AnalysisServlet extends HttpServlet {
                 week.relatedMinutes += relatedMinutes;
                 week.studiedMinutes += studiedMinutes;
                 week.reviewMinutes += reviewMinutes;
-                if (done) {
-                    week.done++;
+                if (completed) {
+                    week.completed++;
                 } else {
-                    week.todo++;
+                    week.scheduled++;
                 }
             }
         }
 
-        double completionRate = percent(doneActivities, totalActivities);
-        double averageStudiedPerDone = doneActivities == 0 ? 0.0 : (double) totalStudiedMinutes / doneActivities;
+        double completionRate = percent(completedActivities, totalActivities);
+        double averageStudiedPerCompleted = completedActivities == 0 ? 0.0 : (double) totalStudiedMinutes / completedActivities;
 
         List<Map<String, Object>> courseStats = new ArrayList<>();
         byCourse.entrySet().stream()
@@ -181,11 +181,11 @@ public class AnalysisServlet extends HttpServlet {
             Map<String, Object> row = new HashMap<>();
             row.put("weekLabel", "Week " + weekNumber);
             row.put("entries", w.entries);
-            row.put("done", w.done);
-            row.put("todo", w.todo);
+            row.put("completed", w.completed);
+            row.put("scheduled", w.scheduled);
             row.put("relatedMinutes", w.relatedMinutes);
             row.put("studiedMinutes", w.studiedMinutes);
-            row.put("completionRate", percent(w.done, w.entries));
+            row.put("completionRate", percent(w.completed, w.entries));
             weekStats.add(row);
 
             if (w.relatedMinutes > mostActiveWeekMinutes) {
@@ -195,15 +195,15 @@ public class AnalysisServlet extends HttpServlet {
         }
 
         req.setAttribute("analysisTotalActivities", totalActivities);
-        req.setAttribute("analysisDoneActivities", doneActivities);
-        req.setAttribute("analysisTodoActivities", todoActivities);
+        req.setAttribute("analysisCompletedActivities", completedActivities);
+        req.setAttribute("analysisScheduledActivities", scheduledActivities);
         req.setAttribute("analysisTotalRelatedMinutes", totalRelatedMinutes);
         req.setAttribute("analysisTotalStudiedMinutes", totalStudiedMinutes);
         req.setAttribute("analysisTotalReviewMinutes", totalReviewMinutes);
         req.setAttribute("analysisCompletionRate", completionRate);
-        req.setAttribute("analysisOverdueTodoCount", overdueTodoCount);
-        req.setAttribute("analysisPendingTodoMinutes", pendingTodoMinutes);
-        req.setAttribute("analysisAverageStudiedPerDone", averageStudiedPerDone);
+        req.setAttribute("analysisOverdueScheduledCount", overdueScheduledCount);
+        req.setAttribute("analysisPendingScheduledMinutes", pendingScheduledMinutes);
+        req.setAttribute("analysisAverageStudiedPerCompleted", averageStudiedPerCompleted);
         req.setAttribute("analysisCoursesCount", byCourse.size());
         req.setAttribute("analysisMostStudiedCourse", mostStudiedCourse);
         req.setAttribute("analysisMostStudiedCourseMinutes", mostStudiedCourseMinutes);
@@ -217,7 +217,7 @@ public class AnalysisServlet extends HttpServlet {
         if (activity == null) {
             return 0;
         }
-        if (activity.isDone()) {
+        if (activity.isCompleted()) {
             return Math.max(0, activity.getStudiedMinutes());
         }
         int review = Math.max(0, activity.getReviewMinutes());
@@ -313,8 +313,8 @@ public class AnalysisServlet extends HttpServlet {
 
     private static final class WeekAccumulator {
         int entries;
-        int done;
-        int todo;
+        int completed;
+        int scheduled;
         int relatedMinutes;
         int studiedMinutes;
         int reviewMinutes;

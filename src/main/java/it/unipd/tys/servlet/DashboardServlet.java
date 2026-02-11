@@ -32,7 +32,7 @@ public class DashboardServlet extends HttpServlet {
     private static final int MAX_CHAPTER_SUBJECT = 255;
     private static final int MAX_SOURCES = 4000;
     private static final int MAX_NOTES = 2000;
-    private static final Set<String> ALLOWED_STATUS = Set.of("TODO", "DONE");
+    private static final Set<String> ALLOWED_STATUS = Set.of("SCHEDULED", "COMPLETED");
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -90,6 +90,11 @@ public class DashboardServlet extends HttpServlet {
         String mode = trim(req.getParameter("mode")).toLowerCase(Locale.ROOT);
         int activityId = parsePositiveInt(req.getParameter("activityId"));
         String status = trim(req.getParameter("status")).toUpperCase(Locale.ROOT);
+        if ("TODO".equals(status)) {
+            status = "SCHEDULED";
+        } else if ("DONE".equals(status)) {
+            status = "COMPLETED";
+        }
         String courseName = trim(req.getParameter("courseName"));
         String chapterSubject = trim(req.getParameter("chapterSubject"));
         String reviewMinutesS = trim(req.getParameter("reviewMinutes"));

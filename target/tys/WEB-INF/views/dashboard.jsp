@@ -59,10 +59,10 @@
       --line: #e4d7d8;
       --accent: #9f171d;
       --accent-soft: #fcebec;
-      --todo-blue: #0f5fae;
-      --todo-blue-soft: #e9f2ff;
-      --done-green: #1f8f50;
-      --done-green-soft: #eaf9f0;
+      --scheduled-blue: #0f5fae;
+      --scheduled-blue-soft: #e9f2ff;
+      --completed-green: #1f8f50;
+      --completed-green-soft: #eaf9f0;
       --late-red: #b42318;
       --late-red-soft: #fdecec;
       --empty-red-soft: #fff1f1;
@@ -192,7 +192,7 @@
       background: #fdeff0;
     }
 
-    .day-cell.day-state-todo {
+    .day-cell.day-state-scheduled {
       background: #eaf2ff;
     }
 
@@ -200,7 +200,7 @@
       background: #f2d2d6;
     }
 
-    .day-cell.day-state-done {
+    .day-cell.day-state-completed {
       background: #ecf8f1;
     }
 
@@ -236,7 +236,7 @@
       background: #fbe2e4;
     }
 
-    .day-cell.day-state-todo:hover {
+    .day-cell.day-state-scheduled:hover {
       background: #ddeaff;
     }
 
@@ -244,7 +244,7 @@
       background: #ebc2c8;
     }
 
-    .day-cell.day-state-done:hover {
+    .day-cell.day-state-completed:hover {
       background: #e3f5eb;
     }
 
@@ -330,8 +330,8 @@
       overflow: hidden;
     }
 
-    .todo-col { background: #f8fbff; }
-    .done-col { background: #f6fff9; }
+    .scheduled-col { background: #f8fbff; }
+    .completed-col { background: #f6fff9; }
     .overdue-col {
       background: #fff1f2;
       border-color: #e3b9bf;
@@ -344,8 +344,8 @@
       letter-spacing: 0.4px;
     }
 
-    .todo-head { color: var(--todo-blue); }
-    .done-head { color: var(--done-green); }
+    .scheduled-head { color: var(--scheduled-blue); }
+    .completed-head { color: var(--completed-green); }
     .overdue-head { color: #8e1c24; }
 
     .summary-columns {
@@ -440,20 +440,20 @@
       flex: 1;
     }
 
-    .activity-item.todo {
-      background: var(--todo-blue-soft);
+    .activity-item.scheduled {
+      background: var(--scheduled-blue-soft);
       border: 1px solid #c2daf7;
       color: #0b3f76;
     }
 
-    .activity-item.todo.overdue {
+    .activity-item.scheduled.overdue {
       background: var(--late-red-soft);
       border-color: #efb2b2;
       color: var(--late-red);
     }
 
-    .activity-item.done {
-      background: var(--done-green-soft);
+    .activity-item.completed {
+      background: var(--completed-green-soft);
       border: 1px solid #b8e5cb;
       color: #17663b;
     }
@@ -531,7 +531,7 @@
       gap: 6px;
     }
 
-    .done-total {
+    .completed-total {
       width: 100%;
       border-radius: 8px;
       background: #f2f6f5;
@@ -791,41 +791,41 @@
               <% } else { %>
                 <%
                   List<StudyActivity> all = activitiesByDate.get(day);
-                  List<StudyActivity> todoList = new ArrayList<>();
-                  List<StudyActivity> doneList = new ArrayList<>();
-                  int doneStudiedTotal = 0;
-                  int scheduledRegisteredTotal = 0;
+                  List<StudyActivity> scheduledList = new ArrayList<>();
+                  List<StudyActivity> completedList = new ArrayList<>();
+                  int completedTotalTime = 0;
+                  int scheduledTotalTime = 0;
 
                   if (all != null) {
                     for (StudyActivity a : all) {
                       if (a == null) continue;
-                      if (a.isDone()) {
-                        doneList.add(a);
-                        doneStudiedTotal += relatedTime(a);
+                      if (a.isCompleted()) {
+                        completedList.add(a);
+                        completedTotalTime += relatedTime(a);
                       } else {
-                        todoList.add(a);
-                        scheduledRegisteredTotal += relatedTime(a);
+                        scheduledList.add(a);
+                        scheduledTotalTime += relatedTime(a);
                       }
                     }
                   }
 
-                  boolean noActivities = todoList.isEmpty() && doneList.isEmpty();
-                  boolean hasDone = !doneList.isEmpty();
-                  boolean hasTodo = !todoList.isEmpty();
-                  boolean hasMissedScheduled = hasTodo && today != null && day.isBefore(today);
+                  boolean noActivities = scheduledList.isEmpty() && completedList.isEmpty();
+                  boolean hasCompleted = !completedList.isEmpty();
+                  boolean hasScheduled = !scheduledList.isEmpty();
+                  boolean hasMissedScheduled = hasScheduled && today != null && day.isBefore(today);
                   boolean hasActivities = !noActivities;
                   boolean isToday = today != null && today.equals(day);
                   String dayClass = "day-cell";
                   if (hasActivities) {
                     dayClass += " has-activities";
-                    if (hasDone && hasTodo) {
+                    if (hasCompleted && hasScheduled) {
                       dayClass += hasMissedScheduled ? " day-state-mixed-overdue" : " day-state-mixed";
-                    } else if (hasDone) {
-                      dayClass += " day-state-done";
+                    } else if (hasCompleted) {
+                      dayClass += " day-state-completed";
                     } else if (hasMissedScheduled) {
                       dayClass += " day-state-overdue";
                     } else {
-                      dayClass += " day-state-todo";
+                      dayClass += " day-state-scheduled";
                     }
                   } else {
                     dayClass += " day-state-empty";
@@ -847,25 +847,25 @@
                     <% if (hasActivities) { %>
                     <div class="day-details">
                       <div class="activity-columns summary-columns">
-                        <section class="activity-col <%= hasMissedScheduled ? "overdue-col" : "todo-col" %> summary-col" aria-label="Scheduled activities summary">
-                          <div class="col-head <%= hasMissedScheduled ? "overdue-head" : "todo-head" %>">Scheduled Activities</div>
-                          <div class="summary-time">Total time: <%= scheduledRegisteredTotal %>m</div>
+                        <section class="activity-col <%= hasMissedScheduled ? "overdue-col" : "scheduled-col" %> summary-col" aria-label="Scheduled activities summary">
+                          <div class="col-head <%= hasMissedScheduled ? "overdue-head" : "scheduled-head" %>">Scheduled Activities</div>
+                          <div class="summary-time">Total time: <%= scheduledTotalTime %>m</div>
                         </section>
-                        <section class="activity-col done-col summary-col" aria-label="Completed activities summary">
-                          <div class="col-head done-head">Completed Activities</div>
-                          <div class="summary-time">Total time: <%= doneStudiedTotal %>m</div>
+                        <section class="activity-col completed-col summary-col" aria-label="Completed activities summary">
+                          <div class="col-head completed-head">Completed Activities</div>
+                          <div class="summary-time">Total time: <%= completedTotalTime %>m</div>
                         </section>
                       </div>
                     </div>
 
                     <div class="day-popup-source" hidden>
-                      <div class="activity-columns <%= (hasDone && hasTodo) ? "" : "single-col" %>">
-                        <% if (hasTodo) { %>
-                        <section class="activity-col <%= hasMissedScheduled ? "overdue-col" : "todo-col" %>" aria-label="Scheduled activities">
-                          <div class="col-head <%= hasMissedScheduled ? "overdue-head" : "todo-head" %>">Scheduled Activities</div>
+                      <div class="activity-columns <%= (hasCompleted && hasScheduled) ? "" : "single-col" %>">
+                        <% if (hasScheduled) { %>
+                        <section class="activity-col <%= hasMissedScheduled ? "overdue-col" : "scheduled-col" %>" aria-label="Scheduled activities">
+                          <div class="col-head <%= hasMissedScheduled ? "overdue-head" : "scheduled-head" %>">Scheduled Activities</div>
                           <ul class="activity-list">
-                            <% for (StudyActivity a : todoList) { %>
-                              <li class="activity-item todo <%= hasMissedScheduled ? "overdue" : "" %>" title="<%= esc(a.getNotes()) %>">
+                            <% for (StudyActivity a : scheduledList) { %>
+                              <li class="activity-item scheduled <%= hasMissedScheduled ? "overdue" : "" %>" title="<%= esc(a.getNotes()) %>">
                                 <div class="activity-main">
                                   <div>
                                     <span class="line-main"><%= esc(a.getCourseName()) %> -> <%= relatedTime(a) %>m</span>
@@ -901,12 +901,12 @@
                         </section>
                         <% } %>
 
-                        <% if (hasDone) { %>
-                        <section class="activity-col done-col" aria-label="Completed activities">
-                          <div class="col-head done-head">Completed Activities</div>
+                        <% if (hasCompleted) { %>
+                        <section class="activity-col completed-col" aria-label="Completed activities">
+                          <div class="col-head completed-head">Completed Activities</div>
                           <ul class="activity-list">
-                            <% for (StudyActivity a : doneList) { %>
-                              <li class="activity-item done" title="<%= esc(a.getNotes()) %>">
+                            <% for (StudyActivity a : completedList) { %>
+                              <li class="activity-item completed" title="<%= esc(a.getNotes()) %>">
                                 <div class="activity-main">
                                   <div>
                                     <span class="line-main"><%= esc(a.getCourseName()) %> -> <%= relatedTime(a) %>m</span>
@@ -942,8 +942,8 @@
                         </section>
                         <% } %>
                       </div>
-                      <% if (hasDone) { %>
-                      <div class="done-total">Completed total: <%= doneStudiedTotal %>m</div>
+                      <% if (hasCompleted) { %>
+                      <div class="completed-total">Completed total: <%= completedTotalTime %>m</div>
                       <% } %>
                     </div>
                     <% } %>
@@ -996,8 +996,8 @@
           <div>
             <label for="statusInput">Status</label>
             <select id="statusInput" name="status" required>
-              <option value="TODO" selected>Scheduled Activities</option>
-              <option value="DONE">Completed Activities</option>
+              <option value="SCHEDULED" selected>Scheduled Activities</option>
+              <option value="COMPLETED">Completed Activities</option>
             </select>
           </div>
           <div>
@@ -1113,7 +1113,7 @@
         }
         modeInput.value = 'create';
         activityIdInput.value = '';
-        statusInput.value = 'TODO';
+        statusInput.value = 'SCHEDULED';
         activityDateInput.value = date;
         activityDateLabel.value = date;
         dialogTitle.textContent = 'Add Study Activity';
@@ -1130,7 +1130,7 @@
         activityIdInput.value = button.getAttribute('data-activity-id') || '';
 
         const activityDate = button.getAttribute('data-date') || '';
-        const status = button.getAttribute('data-status') || 'TODO';
+        const status = button.getAttribute('data-status') || 'SCHEDULED';
         const courseName = decodeForm(button.getAttribute('data-course'));
         const chapterSubject = decodeForm(button.getAttribute('data-subject'));
         const reviewMinutes = button.getAttribute('data-review') || '0';
@@ -1140,7 +1140,8 @@
 
         activityDateInput.value = activityDate;
         activityDateLabel.value = activityDate;
-        statusInput.value = status.toUpperCase() === 'DONE' ? 'DONE' : 'TODO';
+        const normalizedStatus = status.toUpperCase();
+        statusInput.value = (normalizedStatus === 'COMPLETED') ? 'COMPLETED' : 'SCHEDULED';
         courseNameInput.value = courseName;
         chapterInput.value = chapterSubject;
         reviewInput.value = reviewMinutes;
@@ -1185,7 +1186,7 @@
           dayDialogContent.appendChild(cloneColumns);
 
           const total = cell
-            ? (cell.querySelector('.day-popup-source .done-total') || cell.querySelector('.done-total'))
+            ? (cell.querySelector('.day-popup-source .completed-total') || cell.querySelector('.completed-total'))
             : null;
           if (total) {
             const totalClone = total.cloneNode(true);
@@ -1271,3 +1272,4 @@
   </script>
 </body>
 </html>
+

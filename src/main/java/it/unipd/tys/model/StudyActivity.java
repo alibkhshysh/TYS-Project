@@ -47,11 +47,11 @@ public class StudyActivity {
     public String getUsedSources() { return usedSources; }
     public String getNotes() { return notes; }
 
-    public boolean isDone() {
-        return "DONE".equalsIgnoreCase(status);
+    public boolean isCompleted() {
+        return "COMPLETED".equalsIgnoreCase(status);
     }
 
-    public boolean isTodo() {
-        return !isDone();
+    public boolean isScheduled() {
+        return !isCompleted();
     }
 }

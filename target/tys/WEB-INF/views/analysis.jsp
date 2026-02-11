@@ -50,18 +50,18 @@
   String displayName = (String) request.getAttribute("displayName");
 
   int totalActivities = intVal(request.getAttribute("analysisTotalActivities"));
-  int doneActivities = intVal(request.getAttribute("analysisDoneActivities"));
-  int todoActivities = intVal(request.getAttribute("analysisTodoActivities"));
+  int completedActivities = intVal(request.getAttribute("analysisCompletedActivities"));
+  int scheduledActivities = intVal(request.getAttribute("analysisScheduledActivities"));
   int totalRelatedMinutes = intVal(request.getAttribute("analysisTotalRelatedMinutes"));
   int totalStudiedMinutes = intVal(request.getAttribute("analysisTotalStudiedMinutes"));
   int totalReviewMinutes = intVal(request.getAttribute("analysisTotalReviewMinutes"));
-  int overdueTodoCount = intVal(request.getAttribute("analysisOverdueTodoCount"));
-  int pendingTodoMinutes = intVal(request.getAttribute("analysisPendingTodoMinutes"));
+  int overdueScheduledCount = intVal(request.getAttribute("analysisOverdueScheduledCount"));
+  int pendingScheduledMinutes = intVal(request.getAttribute("analysisPendingScheduledMinutes"));
   int coursesCount = intVal(request.getAttribute("analysisCoursesCount"));
   int mostStudiedCourseMinutes = intVal(request.getAttribute("analysisMostStudiedCourseMinutes"));
   int mostActiveWeekMinutes = intVal(request.getAttribute("analysisMostActiveWeekMinutes"));
   double completionRate = doubleVal(request.getAttribute("analysisCompletionRate"));
-  double avgStudiedPerDone = doubleVal(request.getAttribute("analysisAverageStudiedPerDone"));
+  double avgStudiedPerCompleted = doubleVal(request.getAttribute("analysisAverageStudiedPerCompleted"));
 
   String mostStudiedCourse = String.valueOf(request.getAttribute("analysisMostStudiedCourse"));
   String mostActiveWeek = String.valueOf(request.getAttribute("analysisMostActiveWeek"));
@@ -393,11 +393,11 @@
           </article>
           <article class="kpi">
             <span class="label">Planned Pending Time</span>
-            <span class="value warn"><%= pendingTodoMinutes %>m</span>
+            <span class="value warn"><%= pendingScheduledMinutes %>m</span>
           </article>
           <article class="kpi">
             <span class="label">Overdue Scheduled Items</span>
-            <span class="value danger"><%= overdueTodoCount %></span>
+            <span class="value danger"><%= overdueScheduledCount %></span>
           </article>
           <article class="kpi">
             <span class="label">Tracked Courses</span>
@@ -405,7 +405,7 @@
           </article>
           <article class="kpi">
             <span class="label">Avg Completed Time / Item</span>
-            <span class="value"><%= fmt1(avgStudiedPerDone) %>m</span>
+            <span class="value"><%= fmt1(avgStudiedPerCompleted) %>m</span>
           </article>
           <article class="kpi">
             <span class="label">Total Related Time</span>
@@ -502,8 +502,8 @@
               <tr>
                 <td><%= esc(weekLabel) %></td>
                 <td><%= intVal(row.get("entries")) %></td>
-                <td><%= intVal(row.get("done")) %></td>
-                <td><%= intVal(row.get("todo")) %></td>
+                <td><%= intVal(row.get("completed")) %></td>
+                <td><%= intVal(row.get("scheduled")) %></td>
                 <td><%= intVal(row.get("relatedMinutes")) %>m</td>
                 <td><%= intVal(row.get("studiedMinutes")) %>m</td>
                 <td><%= fmt1(doubleVal(row.get("completionRate"))) %>%</td>
@@ -545,7 +545,7 @@
         data: {
           labels: ['Completed', 'Scheduled'],
           datasets: [{
-            data: [<%= doneActivities %>, <%= todoActivities %>],
+            data: [<%= completedActivities %>, <%= scheduledActivities %>],
             backgroundColor: ['#1f8f50', '#0f5fae']
           }]
         },
@@ -561,7 +561,7 @@
           labels: ['Completed studied', 'Review', 'Pending scheduled'],
           datasets: [{
             label: 'Minutes',
-            data: [<%= totalStudiedMinutes %>, <%= totalReviewMinutes %>, <%= pendingTodoMinutes %>],
+            data: [<%= totalStudiedMinutes %>, <%= totalReviewMinutes %>, <%= pendingScheduledMinutes %>],
             backgroundColor: ['#1f8f50', '#9f171d', '#0f5fae']
           }]
         },

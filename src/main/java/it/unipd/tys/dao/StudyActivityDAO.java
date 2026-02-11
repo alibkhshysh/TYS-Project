@@ -16,6 +16,9 @@ import java.util.Map;
 
 public class StudyActivityDAO {
 
+    private static final String STATUS_DB_SCHEDULED = "TODO";
+    private static final String STATUS_DB_COMPLETED = "DONE";
+
     public static void createActivity(
             int userId,
             LocalDate activityDate,
@@ -27,9 +30,9 @@ public class StudyActivityDAO {
             String usedSources,
             String notes
     ) throws SQLException {
-        String normalizedStatus = "DONE".equalsIgnoreCase(status) ? "DONE" : "TODO";
+        String normalizedStatus = normalizeStatusForDb(status);
         String legacyTitle = buildLegacyTitle(courseName, chapterSubject);
-        int legacyDuration = Math.max(1, "DONE".equals(normalizedStatus)
+        int legacyDuration = Math.max(1, STATUS_DB_COMPLETED.equals(normalizedStatus)
                 ? studiedMinutes
                 : Math.max(reviewMinutes, studiedMinutes));
 
@@ -71,9 +74,9 @@ public class StudyActivityDAO {
             String usedSources,
             String notes
     ) throws SQLException {
-        String normalizedStatus = "DONE".equalsIgnoreCase(status) ? "DONE" : "TODO";
+        String normalizedStatus = normalizeStatusForDb(status);
         String legacyTitle = buildLegacyTitle(courseName, chapterSubject);
-        int legacyDuration = Math.max(1, "DONE".equals(normalizedStatus)
+        int legacyDuration = Math.max(1, STATUS_DB_COMPLETED.equals(normalizedStatus)
                 ? studiedMinutes
                 : Math.max(reviewMinutes, studiedMinutes));
 
@@ -143,10 +146,7 @@ public class StudyActivityDAO {
                         continue;
                     }
 
-                    String status = rs.getString("status");
-                    if (status == null || status.isBlank()) {
-                        status = "TODO";
-                    }
+                    String status = normalizeStatusForView(rs.getString("status"));
 
                     String courseName = rs.getString("course_name");
                     if (courseName == null || courseName.isBlank()) {
@@ -226,5 +226,27 @@ public class StudyActivityDAO {
             merged = "Untitled";
         }
         return (merged.length() <= 200) ? merged : merged.substring(0, 200);
+    }
+
+    private static String normalizeStatusForDb(String status) {
+        if (status == null) {
+            return STATUS_DB_SCHEDULED;
+        }
+        String normalized = status.trim().toUpperCase();
+        if ("COMPLETED".equals(normalized) || STATUS_DB_COMPLETED.equals(normalized)) {
+            return STATUS_DB_COMPLETED;
+        }
+        return STATUS_DB_SCHEDULED;
+    }
+
+    private static String normalizeStatusForView(String status) {
+        if (status == null) {
+            return "SCHEDULED";
+        }
+        String normalized = status.trim().toUpperCase();
+        if ("COMPLETED".equals(normalized) || STATUS_DB_COMPLETED.equals(normalized)) {
+            return "COMPLETED";
+        }
+        return "SCHEDULED";
     }
 }
