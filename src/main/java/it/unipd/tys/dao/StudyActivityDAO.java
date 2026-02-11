@@ -196,6 +196,21 @@ public class StudyActivityDAO {
         return result;
     }
 
+    public static boolean deleteActivity(int userId, int activityId) throws SQLException {
+        String sql = """
+                DELETE FROM study_activities
+                WHERE id = ?
+                  AND user_id = ?
+                """;
+
+        try (Connection c = DB.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, activityId);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     private static String buildLegacyTitle(String courseName, String chapterSubject) {
         String course = courseName == null ? "" : courseName.trim();
         String chapter = chapterSubject == null ? "" : chapterSubject.trim();

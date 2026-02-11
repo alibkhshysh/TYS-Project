@@ -93,6 +93,28 @@ public class DashboardServlet extends HttpServlet {
         String notes = trim(req.getParameter("notes"));
         String activityDateS = trim(req.getParameter("activityDate"));
 
+        if ("delete".equals(mode)) {
+            if (activityId <= 0) {
+                setFlashError(session, "Invalid activity id.");
+                redirectToMonth(req, resp, requestedMonth);
+                return;
+            }
+
+            try {
+                boolean deleted = StudyActivityDAO.deleteActivity(userId, activityId);
+                if (!deleted) {
+                    setFlashError(session, "Activity not found or not allowed.");
+                } else {
+                    session.setAttribute("flashSuccess", "Activity removed.");
+                }
+            } catch (SQLException e) {
+                log("Database error while deleting activity", e);
+                setFlashError(session, "Database error while deleting activity.");
+            }
+            redirectToMonth(req, resp, requestedMonth);
+            return;
+        }
+
         if (activityDateS.isEmpty() || status.isEmpty() || courseName.isEmpty()) {
             setFlashError(session, "Date, status, and course name are required.");
             redirectToMonth(req, resp, requestedMonth);

@@ -326,6 +326,24 @@
       font-style: italic;
     }
 
+    .summary-columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .summary-col {
+      justify-content: flex-start;
+      gap: 4px;
+      padding: 6px;
+    }
+
+    .summary-time {
+      font-size: 0.7rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #2f3a45;
+    }
+
     .activity-list {
       list-style: none;
       margin: 0;
@@ -435,6 +453,33 @@
       border-color: #d99aa1;
       background: #fcebec;
       color: var(--accent);
+    }
+
+    .activity-actions {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .delete-btn {
+      border: 1px solid #d99aa1;
+      border-radius: 6px;
+      background: #fff7f8;
+      color: #9f171d;
+      font-size: 0.64rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      line-height: 1.15;
+      white-space: nowrap;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .delete-btn:hover {
+      background: #9f171d;
+      color: #fff;
+      border-color: #9f171d;
     }
 
     .day-bottom {
@@ -708,6 +753,7 @@
                   List<StudyActivity> todoList = new ArrayList<>();
                   List<StudyActivity> doneList = new ArrayList<>();
                   int doneStudiedTotal = 0;
+                  int scheduledRegisteredTotal = 0;
 
                   if (all != null) {
                     for (StudyActivity a : all) {
@@ -717,6 +763,7 @@
                         doneStudiedTotal += Math.max(0, a.getStudiedMinutes());
                       } else {
                         todoList.add(a);
+                        scheduledRegisteredTotal += relatedTime(a);
                       }
                     }
                   }
@@ -756,6 +803,19 @@
 
                     <% if (hasActivities) { %>
                     <div class="day-details">
+                      <div class="activity-columns summary-columns">
+                        <section class="activity-col todo-col summary-col" aria-label="Scheduled activities summary">
+                          <div class="col-head todo-head">Scheduled Activities</div>
+                          <div class="summary-time">Total time: <%= scheduledRegisteredTotal %>m</div>
+                        </section>
+                        <section class="activity-col done-col summary-col" aria-label="Completed activities summary">
+                          <div class="col-head done-head">Completed Activities</div>
+                          <div class="summary-time">Total time: <%= doneStudiedTotal %>m</div>
+                        </section>
+                      </div>
+                    </div>
+
+                    <div class="day-popup-source" hidden>
                       <div class="activity-columns <%= (hasDone && hasTodo) ? "" : "single-col" %>">
                         <% if (hasTodo) { %>
                         <section class="activity-col todo-col" aria-label="Scheduled activities">
@@ -770,19 +830,27 @@
                                     <span class="line-sub"><%= esc(a.getChapterSubject()) %></span>
                                     <% } %>
                                   </div>
-                                  <button
-                                          type="button"
-                                          class="edit-btn"
-                                          data-activity-id="<%= a.getId() %>"
-                                          data-date="<%= esc(dayIso) %>"
-                                          data-status="<%= esc(a.getStatus()) %>"
-                                          data-course="<%= esc(url(a.getCourseName())) %>"
-                                          data-subject="<%= esc(url(a.getChapterSubject())) %>"
-                                          data-review="<%= a.getReviewMinutes() %>"
-                                          data-studied="<%= a.getStudiedMinutes() %>"
-                                          data-sources="<%= esc(url(a.getUsedSources())) %>"
-                                          data-notes="<%= esc(url(a.getNotes())) %>"
-                                  >Edit</button>
+                                  <div class="activity-actions">
+                                    <button
+                                            type="button"
+                                            class="edit-btn"
+                                            data-activity-id="<%= a.getId() %>"
+                                            data-date="<%= esc(dayIso) %>"
+                                            data-status="<%= esc(a.getStatus()) %>"
+                                            data-course="<%= esc(url(a.getCourseName())) %>"
+                                            data-subject="<%= esc(url(a.getChapterSubject())) %>"
+                                            data-review="<%= a.getReviewMinutes() %>"
+                                            data-studied="<%= a.getStudiedMinutes() %>"
+                                            data-sources="<%= esc(url(a.getUsedSources())) %>"
+                                            data-notes="<%= esc(url(a.getNotes())) %>"
+                                    >Edit</button>
+                                    <button
+                                            type="button"
+                                            class="delete-btn"
+                                            data-activity-id="<%= a.getId() %>"
+                                            data-course="<%= esc(url(a.getCourseName())) %>"
+                                    >Delete</button>
+                                  </div>
                                 </div>
                               </li>
                             <% } %>
@@ -803,19 +871,27 @@
                                     <span class="line-sub"><%= esc(a.getChapterSubject()) %></span>
                                     <% } %>
                                   </div>
-                                  <button
-                                          type="button"
-                                          class="edit-btn"
-                                          data-activity-id="<%= a.getId() %>"
-                                          data-date="<%= esc(dayIso) %>"
-                                          data-status="<%= esc(a.getStatus()) %>"
-                                          data-course="<%= esc(url(a.getCourseName())) %>"
-                                          data-subject="<%= esc(url(a.getChapterSubject())) %>"
-                                          data-review="<%= a.getReviewMinutes() %>"
-                                          data-studied="<%= a.getStudiedMinutes() %>"
-                                          data-sources="<%= esc(url(a.getUsedSources())) %>"
-                                          data-notes="<%= esc(url(a.getNotes())) %>"
-                                  >Edit</button>
+                                  <div class="activity-actions">
+                                    <button
+                                            type="button"
+                                            class="edit-btn"
+                                            data-activity-id="<%= a.getId() %>"
+                                            data-date="<%= esc(dayIso) %>"
+                                            data-status="<%= esc(a.getStatus()) %>"
+                                            data-course="<%= esc(url(a.getCourseName())) %>"
+                                            data-subject="<%= esc(url(a.getChapterSubject())) %>"
+                                            data-review="<%= a.getReviewMinutes() %>"
+                                            data-studied="<%= a.getStudiedMinutes() %>"
+                                            data-sources="<%= esc(url(a.getUsedSources())) %>"
+                                            data-notes="<%= esc(url(a.getNotes())) %>"
+                                    >Edit</button>
+                                    <button
+                                            type="button"
+                                            class="delete-btn"
+                                            data-activity-id="<%= a.getId() %>"
+                                            data-course="<%= esc(url(a.getCourseName())) %>"
+                                    >Delete</button>
+                                  </div>
                                 </div>
                               </li>
                             <% } %>
@@ -823,13 +899,13 @@
                         </section>
                         <% } %>
                       </div>
+                      <% if (hasDone) { %>
+                      <div class="done-total">Completed total: <%= doneStudiedTotal %>m</div>
+                      <% } %>
                     </div>
                     <% } %>
 
                     <div class="day-bottom">
-                      <% if (hasDone) { %>
-                      <div class="done-total">Completed total: <%= doneStudiedTotal %>m</div>
-                      <% } %>
                       <button type="button" class="add-btn" data-date="<%= esc(dayIso) %>">Add Activity</button>
                     </div>
                   </div>
@@ -915,6 +991,12 @@
     </form>
   </dialog>
 
+  <form method="post" action="<%=request.getContextPath()%>/dashboard" id="deleteActivityForm" style="display:none;">
+    <input type="hidden" name="month" value="<%= esc(monthParam) %>" />
+    <input type="hidden" name="mode" value="delete" />
+    <input type="hidden" name="activityId" id="deleteActivityIdInput" value="" />
+  </form>
+
   <dialog id="dayDialog">
     <div class="dialog-head">
       <strong id="dayDialogTitle">Day Activities</strong>
@@ -933,6 +1015,8 @@
       const dialog = document.getElementById('activityDialog');
       const dayDialog = document.getElementById('dayDialog');
       const form = document.getElementById('activityForm');
+      const deleteForm = document.getElementById('deleteActivityForm');
+      const deleteActivityIdInput = document.getElementById('deleteActivityIdInput');
       const addButtons = document.querySelectorAll('.add-btn[data-date]');
       const dayOpenButtons = document.querySelectorAll('.day-number-btn[data-day-open="1"]');
       const editButtons = document.querySelectorAll('.edit-btn[data-activity-id]');
@@ -1036,7 +1120,9 @@
         dayDialogTitle.textContent = currentDayDate ? ('Activities - ' + currentDayDate) : 'Day Activities';
         dayDialogContent.innerHTML = '';
 
-        const detailsColumns = cell ? cell.querySelector('.activity-columns') : null;
+        const detailsColumns = cell
+          ? (cell.querySelector('.day-popup-source .activity-columns') || cell.querySelector('.activity-columns'))
+          : null;
         if (detailsColumns) {
           const cloneColumns = detailsColumns.cloneNode(true);
           cloneColumns.classList.add('day-dialog-columns');
@@ -1056,7 +1142,9 @@
 
           dayDialogContent.appendChild(cloneColumns);
 
-          const total = cell.querySelector('.done-total');
+          const total = cell
+            ? (cell.querySelector('.day-popup-source .done-total') || cell.querySelector('.done-total'))
+            : null;
           if (total) {
             const totalClone = total.cloneNode(true);
             totalClone.classList.add('day-dialog-total');
@@ -1072,6 +1160,22 @@
         if (typeof dayDialog.showModal === 'function') {
           dayDialog.showModal();
         }
+      }
+
+      function submitDelete(button) {
+        if (!deleteForm || !deleteActivityIdInput) return;
+        const activityId = button.getAttribute('data-activity-id') || '';
+        if (!activityId) return;
+
+        const courseName = decodeForm(button.getAttribute('data-course'));
+        const message = courseName
+          ? ('Delete activity "' + courseName + '"?')
+          : 'Delete this activity?';
+        if (!window.confirm(message)) return;
+
+        deleteActivityIdInput.value = activityId;
+        closeDayDialog();
+        deleteForm.submit();
       }
 
       addButtons.forEach(function (button) {
@@ -1107,6 +1211,12 @@
       });
 
       dayDialogContent.addEventListener('click', function (event) {
+        const deleteBtn = event.target.closest('.delete-btn[data-activity-id]');
+        if (deleteBtn) {
+          submitDelete(deleteBtn);
+          return;
+        }
+
         const btn = event.target.closest('.edit-btn[data-activity-id]');
         if (!btn) return;
         closeDayDialog();
