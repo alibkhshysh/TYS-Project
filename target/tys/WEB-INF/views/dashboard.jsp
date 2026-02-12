@@ -189,19 +189,19 @@
     }
 
     .day-cell.day-state-empty {
-      background: #fdeff0;
+      background: linear-gradient(180deg, #fff6f7 0%, #fdeff0 66%, #f8e0e3 100%);
     }
 
     .day-cell.day-state-scheduled {
-      background: #eaf2ff;
+      background: linear-gradient(180deg, #f4f8ff 0%, #eaf2ff 66%, #dbe8ff 100%);
     }
 
     .day-cell.day-state-overdue {
-      background: #f2d2d6;
+      background: linear-gradient(180deg, #f7e2e5 0%, #f2d2d6 66%, #eab8be 100%);
     }
 
     .day-cell.day-state-completed {
-      background: #ecf8f1;
+      background: linear-gradient(180deg, #f3fcf7 0%, #ecf8f1 66%, #dcf1e4 100%);
     }
 
     .day-cell.day-state-mixed {
@@ -221,31 +221,51 @@
       overflow: hidden;
       box-sizing: border-box;
       border-radius: 10px;
-      border: 1px solid #e3d9da;
-      transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
+      border: 1px solid #dccdd0;
+      background: rgba(255, 255, 255, 0.12);
+      transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease, background-color 150ms ease;
+      position: relative;
+      isolation: isolate;
     }
+
+    /* Crystal finish block start (visual-only, safe to revert as one block) */
+    .day-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.44) 0%, rgba(255, 255, 255, 0.16) 36%, rgba(255, 255, 255, 0.05) 58%, rgba(255, 255, 255, 0) 80%);
+      z-index: 0;
+    }
+
+    .day-wrapper > * {
+      position: relative;
+      z-index: 1;
+    }
+    /* Crystal finish block end */
 
     .day-cell:hover .day-wrapper,
     .day-cell:focus-within .day-wrapper {
-      box-shadow: 0 2px 8px rgba(93, 62, 67, 0.12);
+      box-shadow: 0 2px 10px rgba(93, 62, 67, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.35);
       transform: translateY(-1px);
-      border-color: #d8c6c8;
+      border-color: #cab0b4;
     }
 
     .day-cell.day-state-empty:hover {
-      background: #fbe2e4;
+      background: linear-gradient(180deg, #fff9fa 0%, #fbe2e4 65%, #f5d4d8 100%);
     }
 
     .day-cell.day-state-scheduled:hover {
-      background: #ddeaff;
+      background: linear-gradient(180deg, #f8fbff 0%, #ddeaff 65%, #cfe1ff 100%);
     }
 
     .day-cell.day-state-overdue:hover {
-      background: #ebc2c8;
+      background: linear-gradient(180deg, #f9e8ea 0%, #ebc2c8 65%, #e3a9b0 100%);
     }
 
     .day-cell.day-state-completed:hover {
-      background: #e3f5eb;
+      background: linear-gradient(180deg, #f8fdfb 0%, #e3f5eb 65%, #d1ecd9 100%);
     }
 
     .day-cell.day-state-mixed:hover {
@@ -351,11 +371,20 @@
       overflow: hidden;
     }
 
-    .scheduled-col { background: #f8fbff; }
-    .completed-col { background: #f6fff9; }
+    .scheduled-col {
+      background: linear-gradient(180deg, #fcfeff 0%, #f5faff 100%);
+      border-color: #cfe1f7;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    }
+    .completed-col {
+      background: linear-gradient(180deg, #fbfffd 0%, #f3fcf7 100%);
+      border-color: #cde8d8;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    }
     .overdue-col {
-      background: #fff1f2;
-      border-color: #e3b9bf;
+      background: linear-gradient(180deg, #fff8f8 0%, #fff1f2 100%);
+      border-color: #e0b2b8;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
     }
 
     .col-head {
@@ -462,21 +491,24 @@
     }
 
     .activity-item.scheduled {
-      background: var(--scheduled-blue-soft);
-      border: 1px solid #c2daf7;
+      background: linear-gradient(180deg, #f4f9ff 0%, var(--scheduled-blue-soft) 100%);
+      border: 1px solid #bcd6f5;
       color: #0b3f76;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
     }
 
     .activity-item.scheduled.overdue {
-      background: var(--late-red-soft);
+      background: linear-gradient(180deg, #fff3f4 0%, var(--late-red-soft) 100%);
       border-color: #efb2b2;
       color: var(--late-red);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
     }
 
     .activity-item.completed {
-      background: var(--completed-green-soft);
+      background: linear-gradient(180deg, #f6fff9 0%, var(--completed-green-soft) 100%);
       border: 1px solid #b8e5cb;
       color: #17663b;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
     }
 
     .line-main {
