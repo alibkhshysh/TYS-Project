@@ -189,27 +189,27 @@
     }
 
     .day-cell.day-state-empty {
-      background: linear-gradient(180deg, #fff6f7 0%, #fdeff0 66%, #f8e0e3 100%);
+      background: linear-gradient(180deg, #fff8f9 0%, #fde9ec 62%, #f8d7dd 100%);
     }
 
     .day-cell.day-state-scheduled {
-      background: linear-gradient(180deg, #f4f8ff 0%, #eaf2ff 66%, #dbe8ff 100%);
+      background: linear-gradient(180deg, #f5faff 0%, #e1eeff 62%, #c9ddff 100%);
     }
 
     .day-cell.day-state-overdue {
-      background: linear-gradient(180deg, #f7e2e5 0%, #f2d2d6 66%, #eab8be 100%);
+      background: linear-gradient(180deg, #fceff2 0%, #f7dbe0 62%, #efc1c9 100%);
     }
 
     .day-cell.day-state-completed {
-      background: linear-gradient(180deg, #f3fcf7 0%, #ecf8f1 66%, #dcf1e4 100%);
+      background: linear-gradient(180deg, #f5fef9 0%, #e2f7ec 62%, #c8ebd9 100%);
     }
 
     .day-cell.day-state-mixed {
-      background: linear-gradient(to right, #eaf2ff 0%, #eaf2ff 50%, #ecf8f1 50%, #ecf8f1 100%);
+      background: linear-gradient(to right, #e1eeff 0%, #e1eeff 50%, #e2f7ec 50%, #e2f7ec 100%);
     }
 
     .day-cell.day-state-mixed-overdue {
-      background: linear-gradient(to right, #f2d2d6 0%, #f2d2d6 50%, #ecf8f1 50%, #ecf8f1 100%);
+      background: linear-gradient(to right, #f7dbe0 0%, #f7dbe0 50%, #e2f7ec 50%, #e2f7ec 100%);
     }
 
     .day-wrapper {
@@ -222,7 +222,7 @@
       box-sizing: border-box;
       border-radius: 10px;
       border: 1px solid #dccdd0;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.18);
       transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease, background-color 150ms ease;
       position: relative;
       isolation: isolate;
@@ -235,7 +235,7 @@
       inset: 0;
       border-radius: inherit;
       pointer-events: none;
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.44) 0%, rgba(255, 255, 255, 0.16) 36%, rgba(255, 255, 255, 0.05) 58%, rgba(255, 255, 255, 0) 80%);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 255, 255, 0.2) 34%, rgba(255, 255, 255, 0.08) 56%, rgba(255, 255, 255, 0) 80%);
       z-index: 0;
     }
 
@@ -253,27 +253,27 @@
     }
 
     .day-cell.day-state-empty:hover {
-      background: linear-gradient(180deg, #fff9fa 0%, #fbe2e4 65%, #f5d4d8 100%);
+      background: linear-gradient(180deg, #fffbfd 0%, #fce3e8 65%, #f6ccd4 100%);
     }
 
     .day-cell.day-state-scheduled:hover {
-      background: linear-gradient(180deg, #f8fbff 0%, #ddeaff 65%, #cfe1ff 100%);
+      background: linear-gradient(180deg, #fbfdff 0%, #d6e8ff 65%, #bfd7ff 100%);
     }
 
     .day-cell.day-state-overdue:hover {
-      background: linear-gradient(180deg, #f9e8ea 0%, #ebc2c8 65%, #e3a9b0 100%);
+      background: linear-gradient(180deg, #fef4f6 0%, #f3ccd4 65%, #eab3bd 100%);
     }
 
     .day-cell.day-state-completed:hover {
-      background: linear-gradient(180deg, #f8fdfb 0%, #e3f5eb 65%, #d1ecd9 100%);
+      background: linear-gradient(180deg, #fbfffd 0%, #d8f2e6 65%, #bfe6d2 100%);
     }
 
     .day-cell.day-state-mixed:hover {
-      background: linear-gradient(to right, #ddeaff 0%, #ddeaff 50%, #e3f5eb 50%, #e3f5eb 100%);
+      background: linear-gradient(to right, #d6e8ff 0%, #d6e8ff 50%, #d8f2e6 50%, #d8f2e6 100%);
     }
 
     .day-cell.day-state-mixed-overdue:hover {
-      background: linear-gradient(to right, #ebc2c8 0%, #ebc2c8 50%, #e3f5eb 50%, #e3f5eb 100%);
+      background: linear-gradient(to right, #f3ccd4 0%, #f3ccd4 50%, #d8f2e6 50%, #d8f2e6 100%);
     }
 
     .day-top {
